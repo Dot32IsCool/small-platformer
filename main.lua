@@ -10,7 +10,9 @@ local screenShake = {x=0,y=0,xV=0,yV=0}
 local ConnectedController = false
 local holdingJump = false
 
-local hit = love.audio.newSource("untitled.ogg", "static")
+local hit = love.audio.newSource("hit.ogg", "static")
+local jump = love.audio.newSource("jump.ogg", "static")
+local respawn = love.audio.newSource("respawn.wav", "static")
 
 function love.load()
 	intro:load()
@@ -41,8 +43,10 @@ function love.update(dt)
 				moving = true
 			end
 
-			if love.keyboard.isDown("r")then
+			if love.keyboard.isDown("r") or (ConnectedController and ConnectedController:isGamepadDown("dpleft", "dpright", "dpup", "dpdown")) or player.y > 2000 then
 				player = {x=400, y=100, w=40, s=40, r=8, xV=0, yV=0, squish = true}
+				respawn:setVolume(0.3)
+				respawn:play()
 			end
 			if not moving then
 				player.xV = player.xV*0.9
@@ -61,6 +65,7 @@ function love.update(dt)
 						screenShake.xV = screenShake.xV+player.xV
 						if math.abs(player.xV) > 1 then
 							hit:setVolume((math.abs(player.xV)-1)/10)
+							hit:setPitch(0.8 + love.math.random()*0.8)
 							hit:stop() hit:play()
 						end
 
@@ -83,8 +88,9 @@ function love.update(dt)
 									player.xV = 10
 								end
 								screenShake.yV = screenShake.yV-player.yV
-								hit:setVolume((math.abs(player.yV)-1)/10)
-								hit:stop() hit:play()
+								jump:setVolume(0.1)
+								jump:setPitch(1.05)
+								jump:stop() jump:play()
 							end
 						end
 					end
@@ -106,7 +112,8 @@ function love.update(dt)
 						player.w = (math.abs(player.yV) > 5 and player.s+math.abs(player.yV)*0.5) or player.w
 						screenShake.yV = screenShake.yV+player.yV
 						if math.abs(player.yV) > 1 then
-							hit:setVolume((math.abs(player.yV)-1)/10)
+							hit:setVolume((math.abs(player.xV)-1)/10)
+							hit:setPitch(0.8 + love.math.random()*0.8)
 							hit:stop() hit:play()
 						end
 
@@ -118,8 +125,9 @@ function love.update(dt)
 						or (ConnectedController and ConnectedController:isGamepadDown("a", "y"))) then
 							player.yV = -15
 							screenShake.yV = screenShake.yV-player.yV
-							hit:setVolume((math.abs(player.yV)-1)/10)
-							hit:stop() hit:play()
+							jump:setVolume(0.1)
+							jump:setPitch(1.05)
+							jump:stop() jump:play()
 						end
 					end
 				end
@@ -136,6 +144,8 @@ function love.draw()
 	end
 
 	love.graphics.translate(screenShake.x, screenShake.y)
+	love.graphics.translate(love.graphics.getWidth()/2-400, love.graphics.getHeight()/2-300)
+
 	love.graphics.setColour(1,1,1, 0.3)
 	love.graphics.rectangle('fill', player.x-player.w/2-player.r, player.y-player.s/2-player.r, player.w+player.r*2, player.s+player.r*2, player.r*2)
 	love.graphics.setColour(1,1,1)
