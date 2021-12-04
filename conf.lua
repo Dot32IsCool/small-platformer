@@ -10,14 +10,14 @@ function love.conf(t)
     t.audio.mic = false                 -- Request and use microphone capabilities in Android (boolean)
     t.audio.mixwithsystem = true        -- Keep background music playing when opening LOVE (boolean, iOS and Android only)
 
-    t.window.title = "platofmrer"             -- The window title (string)
-    t.window.icon = "icon3.png"                 -- Filepath to an image to use as the window's icon (string)
-    t.window.width = 800                -- The window width (number)
-    t.window.height = 600               -- The window height (number)
+    t.window.title = "platformer"             -- The window title (string)
+    t.window.icon = "icons/default.png"         -- Filepath to an image to use as the window's icon (string)
+    t.window.width = 1280                -- The window width (number)
+    t.window.height = 720               -- The window height (number)
     t.window.borderless = false         -- Remove all border visuals from the window (boolean)
     t.window.resizable = true           -- Let the window be user-resizable (boolean)
-    t.window.minwidth = 800             -- Minimum window width if the window is resizable (number)
-    t.window.minheight = 600            -- Minimum window height if the window is resizable (number)
+    -- t.window.minwidth = 800             -- Minimum window width if the window is resizable (number)
+    -- t.window.minheight = 600            -- Minimum window height if the window is resizable (number)
     t.window.fullscreen = false         -- Enable fullscreen (boolean)
     t.window.fullscreentype = "desktop" -- Choose between "desktop" fullscreen or "exclusive" fullscreen mode (string)
     t.window.vsync = 1                  -- Vertical sync mode (number)
@@ -65,7 +65,7 @@ end
 ---]]
 
 -- 1 / Ticks Per Second
-local TICK_RATE = 1 / FPS
+local TICK_RATE = 1 / 60
 
 -- How many Frames are allowed to be skipped at once due to lag (no "spiral of death")
 local MAX_FRAME_SKIP = 25
